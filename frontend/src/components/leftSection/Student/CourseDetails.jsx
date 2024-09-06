@@ -15,8 +15,7 @@ const CourseDetails = ({ isVisible, selectedDetails, userId }) => {
   //   const getSortedWithCourseDetails="http://127.0.0.1:8000/api/enrolledStudents?filter["+userId+"]=1&sort=courseId&include=course"
 //   //const getSortedCourseDetails ="http://127.0.0.1:8000/api/enrolledStudents?sort=courseId&filter[userId]=1"
 //  // const getCourseDetails ="http://127.0.0.1:8000/api/enrolledStudents?filter[userId]=1"
-  const getSortedWithCourseDetails = `http://127.0.0.1:8000/api/enrolledStudents?filter[${userId}]=1&sort=courseId&include=course`;
-
+const getDetails=`http://127.0.0.1:8000/api/enrolledStudents?filter[userid]=${userId}&sort=courseId&include=course`;
   const handelCourseDetails = (course) => {
     selectedDetails(course.attributes.courseId);
   };
@@ -24,12 +23,13 @@ const CourseDetails = ({ isVisible, selectedDetails, userId }) => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(getSortedWithCourseDetails, {
+        const response = await axios.get(getDetails, {
           headers: {
             Authorization: "Bearer " + token
           }
         });
         setCourses(response.data.data);
+        console.log(response.data.data)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -67,7 +67,6 @@ if (error) {
 
         </div>
        
-
         <div className="card-body">
           <div className="p-1 mb-1 border rounded bg-light">
             <div className="row font-weight-bold ">

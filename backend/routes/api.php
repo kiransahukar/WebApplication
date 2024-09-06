@@ -13,6 +13,7 @@ use App\Http\Controllers\CourseControllers\CourseDetailsController;
 use App\Http\Controllers\Enrolled\EnrolledStudentController;
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\AuthorTicketsController;
+use App\Http\Controllers\FileController\FileController;
 use App\Http\Controllers\LabsData\LabsDataController;
 use App\Livewire\Actions\Logout;
 
@@ -35,8 +36,8 @@ Route::middleware('auth:sanctum')->get('/userData', function (Request $request) 
 });
 
 Route::post('/login',[AuthController::class, 'login']);
-Route::get('/logTry',[AuthController::class, 'logTry']);
-Route::post('/register',[AuthController::class, 'register']);
+//Route::get('/logTry',[AuthController::class, 'logTry']);
+//Route::post('/register',[AuthController::class, 'register']);
 
 Route::middleware(['auth:sanctum'])->post('/logout',[AuthController::class, 'logout']);
 
@@ -63,7 +64,18 @@ Route::middleware(['auth:sanctum'])->apiResource('courses.courseDetails',AllCour
 
 Route::middleware(['auth:sanctum'])->apiResource('courseDetails',CourseDetailsController::class);
 Route::middleware(['auth:sanctum'])->patch('courseDetails',[CourseDetailsController::class,'update']);
+Route::middleware(['auth:sanctum'])->delete('courseDetails',[CourseDetailsController::class,'destroy']);
 
 Route::middleware(['auth:sanctum'])->apiResource('enrolledStudents',EnrolledStudentController::class);
 
-Route::middleware(['auth:sanctum'])->apiResource('labsData',LabsDataController::class);
+Route::middleware(['auth:sanctum'])->apiResource('labsData',LabsDataController::class)->except(['update']);
+Route::middleware(['auth:sanctum'])->patch('labsData',[LabsDataController::class,'update']);
+Route::middleware(['auth:sanctum'])->put('labsData',[LabsDataController::class,'replace']);
+
+
+Route::post('file',[FileController::class,'store']);
+Route::get('/getfile/{filename}', [FileController::class, 'getFile']);
+
+
+
+//Route::post('/file', [FileController::class, 'store'])->name('file');

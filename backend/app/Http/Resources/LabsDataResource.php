@@ -27,10 +27,8 @@ class LabsDataResource extends JsonResource
             'attributes'=>[
                 'userId'=> $this->user_id,
                 'sessionId'=> $this->session_id,
-                'comment'=> $this->when(
-                    !$request->routeIs(['tickets.index','authors.tickets.index']),
-                    $this->Comment
-                ),
+                'title'=>$this->title,
+                'comment'=>$this->Comment,
                 'status'=>$this->status,
                 'createdAt'=>$this->created_at,
                 'updatedAt'=>$this->updated_at,

@@ -12,7 +12,7 @@ const StudentsLabDetails = ({ sessionId }) => {
   const [comments, setComments] = useState({});
   const [editingCommentId, setEditingCommentId] = useState(null);
 
-  const getCourseDetails = `http://127.0.0.1:8000/api/labsData?filter[sessionId]=${sessionId.session_no}`;
+  const getCourseDetails = `http://127.0.0.1:8000/api/labsData?filter[sessionId]=${sessionId.id}`;
 
   useEffect(() => {
     const fetchCourseDetails = async () => {

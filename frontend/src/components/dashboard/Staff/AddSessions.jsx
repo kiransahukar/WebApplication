@@ -45,7 +45,7 @@ const AddSessions = ({courseId, content}) => {
         headers: {
             Authorization:"Bearer "+token
           }
-      }); // Replace with your API endpoint
+      }); 
       setMessage('Session added successfully!');
       setSessionNo('');
       setSessionName('');

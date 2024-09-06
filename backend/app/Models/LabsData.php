@@ -13,12 +13,14 @@ class LabsData extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'status' , 'user_id'];
+    protected $fillable = ['session_id', 'title','comment', 'status' , 'user_id'];
 
     public function author():BelongsTo {
         return $this->belongsTo(User::class,'user_id');
     }
-
+    public function sessionDetail():BelongsTo {
+        return $this->belongsTo(CourseDetails::class,'session_id');
+    }
     
     public function scopeFilter(Builder $builder, QueryFilter $filters){
         return $filters->apply($builder);

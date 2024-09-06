@@ -12,7 +12,8 @@ use App\Http\Resources\CourseDetailsResource;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Http\Request;
 
 class CourseDetailsController extends ApiController
 {
@@ -98,8 +99,14 @@ class CourseDetailsController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CourseDetails $courseDetails)
+    public function destroy($id)
     {
-        //
+        try{
+            $courseDetail = CourseDetails::findOrFail($id);
+           $courseDetail->delete();
+            return $this->ok('sucessfully deleted ',[$courseDetail]);
+        } catch (ModelNotFoundException $exception) {
+             return   $this->error('Ticket cannot found.', 404);
+        }
     }
 }

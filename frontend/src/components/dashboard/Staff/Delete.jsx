@@ -22,10 +22,10 @@ const Update = ({ sessionDetail, content }) => {
         },
       },
     };
-
-    const postApi = 'http://127.0.0.1:8000/api/courseDetails';
+    //console.log(sessionDetail)
+    const deleteApi = 'http://127.0.0.1:8000/api/courseDetails/'+sessionDetail.id;
     try {
-     const response= await axios.patch(postApi, data, {
+     const response= await axios.delete(deleteApi, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -55,22 +55,24 @@ const Update = ({ sessionDetail, content }) => {
       <h2 className="text-center mb-4">Delete Session</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="sessionNo" className="mb-3">
-          <Form.Label>Session No:</Form.Label>
-          <Form.Control
+          <Form.Label>Session No : </Form.Label>
+          <Form.Text>{sessionNo}</Form.Text>
+          {/* <Form.Control
            // type="text"
            // value={sessionNo}
-            onChange={(e) => setSessionNo(e.target.value)}
+            //onChange={(e) => setSessionNo(e.target.value)}
             placeholder={sessionNo}
-          />
+          /> */}
         </Form.Group>
         <Form.Group controlId="sessionName" className="mb-3">
-          <Form.Label>Session Name:</Form.Label>
-          <Form.Control
+          <Form.Label>Session Name : </Form.Label>
+          <Form.Text>{sessionName}</Form.Text>
+          {/* <Form.Control
             //type="text"
            // value={sessionName}
-            onChange={(e) => setSessionName(e.target.value)}
+            //onChange={(e) => setSessionName(e.target.value)}
             placeholder={sessionName}
-          />
+          /> */}
         </Form.Group>
         <div className="d-flex">
          <Button variant="outline-dark" type="submit" className="me-2">Delete</Button>

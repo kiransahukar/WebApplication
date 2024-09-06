@@ -1,25 +1,28 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
+import FileUpload from "./FileUpload";
 
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 
-const SessionDetails = ({ courseId }) => {
+const SessionDetails = ({ courseId, userId }) => {
   const [courseDetails, setCourseDetails] = useState([]);
+  const [labDetails, setLabDetails] = useState({});
+  const [labDetailLength, setLabDetailLength] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedSessionId, setExpandedSessionId] = useState(null);
+  const [view, setView] = useState(false);
 
   const getCourseDetails = `http://127.0.0.1:8000/api/courseDetails?filter[courseId]=${courseId}`;
-
+  //const getDetails='http://127.0.0.1:8000/api/enrolledStudents?filter[userid]=1&sort=courseId&include=course'
   useEffect(() => {
     const fetchCourseDetails = async () => {
       try {
         const response = await axios.get(getCourseDetails, {
           headers: {
-            Authorization: "Bearer " + token
-          }
+            Authorization: "Bearer " + token,
+          },
         });
         setCourseDetails(response.data);
       } catch (err) {
@@ -33,12 +36,48 @@ const SessionDetails = ({ courseId }) => {
   }, [courseId]);
 
   const handleExpand = (sessionId) => {
+    setView(false);
     setExpandedSessionId(expandedSessionId === sessionId ? null : sessionId);
+
+    const fetchCourseDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/labsData?filter[sessionId]=${sessionId}&filter[userId]=${userId}`,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        if (response.data.data.length === 1) {
+          setLabDetailLength(1);
+          setLabDetails(response.data.data[0]);
+        } else {
+          setLabDetailLength(0);
+          setLabDetails([]);
+        }
+
+        //console.log(response.data.data.length);
+        console.log(response.data.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseDetails();
   };
 
   const handleButtonClick = (message, sessionId) => {
     console.log(message, sessionId);
-    // Handle button click logic here
+
+    if (view === true) {
+      setView(false);
+    } else {
+      setView(true);
+    }
   };
 
   if (loading) {
@@ -50,8 +89,8 @@ const SessionDetails = ({ courseId }) => {
   }
 
   return (
-    <div className="container " >
-      <h2>Student Dashboard</h2>
+    <div className="container ">
+      <h2>Student Dashboard </h2>
       <div className="p-2 mb-1 border rounded bg-light ">
         <div className="d-flex flex-column">
           <div className="row font-weight-bold">
@@ -61,7 +100,7 @@ const SessionDetails = ({ courseId }) => {
           </div>
         </div>
       </div>
-      <div >
+      <div>
         {courseDetails.data.map((courseDetail) => (
           <div
             key={courseDetail.id}
@@ -75,15 +114,42 @@ const SessionDetails = ({ courseId }) => {
             </div>
             {expandedSessionId === courseDetail.id && (
               <div className="mt-2">
-                <p>Detail 1: {courseDetail.detail1}</p>
-                <p>Detail 2: {courseDetail.detail2}</p>
-                <p>Detail 3: {courseDetail.detail3}</p>
-                <Button
-                  variant="outline-dark"
-                  onClick={(e) => { e.stopPropagation(); handleButtonClick("hello", courseDetail.id); }}
-                >
-                  hello
-                </Button>
+                {labDetailLength === 1 ? (
+                  <>
+                    <p>
+                      Uploaded At:{" "}
+                      {new Date(
+                        labDetails.attributes.updatedAt
+                      ).toLocaleDateString()}{" , "}
+                      {new Date(
+                        labDetails.attributes.updatedAt
+                      ).toLocaleTimeString()}
+                    </p>
+
+                    <p>Comment : {labDetails.attributes.comment}</p>
+                    <p>Status : {labDetails.attributes.status}</p>
+                  </>
+                ) : (
+                  <>
+                    {view === true && (
+                      <FileUpload
+                        userId={userId}
+                        sessionId={courseDetail.id}
+                        setExpandedSessionId={setExpandedSessionId}
+                      />
+                    )}
+
+                    <Button
+                      variant="outline-dark"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleButtonClick("hello", courseDetail.id);
+                      }}
+                    >
+                      {view === false ? <>Upload</> : <>Cancel</>}
+                    </Button>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -94,4 +160,3 @@ const SessionDetails = ({ courseId }) => {
 };
 
 export default SessionDetails;
-

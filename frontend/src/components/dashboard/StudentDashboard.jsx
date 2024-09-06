@@ -51,7 +51,7 @@ const StudentDashboard = () => {
 
         <Col md={9}>
           <div className="mainContent">
-            <SessionDetails courseId={selectedCourse} />
+            <SessionDetails courseId={selectedCourse} userId={userId} />
           </div>
         </Col>
 

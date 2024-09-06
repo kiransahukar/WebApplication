@@ -27,7 +27,7 @@ class LabsDataFactory extends Factory
             'session_id' => $sessionId ,
             
             'Comment'=>fake()->words(3, true),
-           // 'description' => fake()->paragraph(),
+            'title' => fake()->words(1, true),
             'status'=>fake()->randomElement(['Completed','Request'])
             // 'email' => fake()->unique()->safeEmail(),
             // 'email_verified_at' => now(),

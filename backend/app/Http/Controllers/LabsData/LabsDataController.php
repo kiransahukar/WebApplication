@@ -7,9 +7,10 @@ use App\Models\User;
 
 use App\Http\Filters\LabsDataFilter;
 
-use App\Http\Requests\StoreTicketRequest;
-use App\Http\Requests\ReplaceTicketRequest;
-use App\Http\Requests\UpdateTicketRequest;
+use App\Http\Requests\LabsData\StoreLabsDataRequest;
+
+use App\Http\Requests\LabsData\UpdateLabsDataRequest;
+use App\Http\Requests\LabsData\ReplaceLabsDataRequest;
 use App\Http\Resources\LabsDataResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -23,14 +24,19 @@ class LabsDataController extends ApiController
      */
     public function index(LabsDataFilter $filters)
     {
-         
+
         // if($this->include('author')) {
 
         //     return LabsDataResource::collection(LabsData::with('author')->paginate());
         // }
+     
 
-        return  LabsDataResource::collection(LabsData::filter($filters)->paginate());
-    //    return LabsDataResource::collection(LabsData::paginate());
+
+           // $data = LabsDataResource::collection(LabsData::filter($filters));
+            $data = LabsDataResource::collection(LabsData::filter($filters)->paginate());
+            return $data;
+
+        //    return LabsDataResource::collection(LabsData::paginate());
 
     }
 
@@ -45,42 +51,44 @@ class LabsDataController extends ApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTicketRequest $request)
-    {   
-        try{
-            $user=User::findOrFail($request->input('data.relationships.author.data.id'));
-  
-        }catch(ModelNotFoundException $exception) {
-           return $this->ok("User not found",[
-                'error'=>"Provided user id does not exists"
-            ]);
-        }
+    public function store(StoreLabsDataRequest $request)
+    {
 
-        $model = [
-            'title' => $request->input('data.attributes.title'),
-            'description' =>  $request->input('data.attributes.description'),
-            'status' =>  $request->input('data.attributes.status'),
-            'user_id' =>  $request->input('data.relationships.author.data.id'),
-        ];
+        // try{
+        //     $user=User::findOrFail($request->input('data.relationships.author.data.id'));
+
+        // }catch(ModelNotFoundException $exception) {
+        //    return $this->ok("User not found",[
+        //         'error'=>"Provided user id does not exists"
+        //     ]);
+        // }
+
+        // $model = [
+        //     'user_id' => $request->input('data.attributes.user_id'),
+        //     'session_id' =>  $request->input('data.attributes.session_id'),
+        //     'comment' =>  $request->input('data.attributes.comment'),
+        //     'status' =>  $request->input('data.attributes.status'),
+        //     //'user_id' =>  $request->input('data.relationships.author.data.id'),
+        // ];
 
 
-        return new LabsDataResource(LabsData::create($model));
-  }
+        return new LabsDataResource(LabsData::create($request->mappedAttributes()));
+    }
 
     /**
      * Display the specified resource.
      */
-    public function show($ticket_id)
+    public function show($lab_id)
     {
         try {
-            $ticket = LabsData::findOrFail($ticket_id);
-          
+            $labData = LabsData::findOrFail($lab_id);
+
             if ($this->include('author')) {
 
-                return new LabsDataResource($ticket->load('user'));
+                return new LabsDataResource($labData->load('user'));
             }
 
-            return new LabsDataResource($ticket);
+            return new LabsDataResource($labData);
         } catch (ModelNotFoundException $exception) {
             return   $this->error('LabsData cannot found.', 404);
         }
@@ -97,44 +105,49 @@ class LabsDataController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, LabsData $ticket)
+    public function update(UpdateLabsDataRequest $request)
     {
-        //
-    }
-     /**
-     * Replace the specified resource in storage.
-     */
-    public function replace(ReplaceTicketRequest $request, $ticket_id)
-    {
-        try{
-                
-            $ticket = LabsData::findOrFail($ticket_id);
-            $model = [
-                'title' => $request->input('data.attributes.title'),
-                'description' =>  $request->input('data.attributes.description'),
-                'status' =>  $request->input('data.attributes.status'),
-                'user_id' =>  $request->input('data.relationships.author.data.id'),
-            ];
-            $ticket->update($model);
-            return new LabsDataResource($ticket);
-        }catch(ModelNotFoundException $exception) {
-          
+
+
+        try {
+
+            $labData = LabsData::findOrFail($request->input('data.attributes.id'));
+            $labData->update($request->mappedAttributes());
+            return new LabsDataResource($labData);
+        } catch (ModelNotFoundException $exception) {
+
             return   $this->error('LabsData cannot found.', 404);
         }
+    }
+    /**
+     * Replace the specified resource in storage.
+     */
+    public function replace(ReplaceLabsDataRequest $request)
+    {
+        // return $request;
+        try {
 
+            $labData = LabsData::findOrFail($request->input('data.attributes.id'));
+
+            $labData->update($request->mappedAttributes());
+            return new LabsDataResource($labData);
+        } catch (ModelNotFoundException $exception) {
+
+            return   $this->error('LabsData cannot found.', 404);
+        }
     }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($ticket_id)
-    {   
+    {
 
-        try{
+        try {
             $ticket = LabsData::findOrFail($ticket_id);
             $ticket->delete();
             return $this->ok('LabsData sucessfully deleted');
         } catch (ModelNotFoundException $exception) {
-             return   $this->error('LabsData cannot found.', 404);
+            return   $this->error('LabsData cannot found.', 404);
         }
     }
 }

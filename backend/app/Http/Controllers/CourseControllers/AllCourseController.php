@@ -5,7 +5,7 @@ namespace App\Http\Controllers\CourseControllers;
 use App\Models\Course;
 use App\Http\Controllers\ApiController;
 use App\Http\Filters\CourseFilter;
-use App\Http\Requests\StoreCourseDetailsRequest;
+use App\Http\Requests\CourseDetails\StoreCourseDetailsRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Http\Resources\CourseDetailsResource;
 use App\Http\Resources\CourseResource;

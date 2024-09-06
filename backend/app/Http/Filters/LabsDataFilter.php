@@ -50,6 +50,9 @@ class LabsDataFilter extends QueryFilter{
     public function id($value) {
         return $this->builder->whereIn('id',explode(',',$value));
     }
+    public function userId($value) {
+        return $this->builder->whereIn('user_id',explode(',',$value));
+    }
     public function sessionId($value) {
         return $this->builder->whereIn('session_id',explode(',',$value));
     }

@@ -19,69 +19,69 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@app.com',
-            'profession'=>'Admin',
-            'password'=>bcrypt('password')
-        ]);
+    //     User::create([
+    //         'name' => 'Admin',
+    //         'email' => 'admin@app.com',
+    //         'profession'=>'Admin',
+    //         'password'=>bcrypt('password')
+    //     ]);
        
-        User::create([
-            'name' => 'Staff',
-            'email' => 'staff@app.com',
-            'profession'=>'Staff',
-            'password'=>bcrypt('password')
-        ]);
-        User::create([
-            'name' => 'Student',
-            'email' => 'student@app.com',
-            'profession'=>'Student',
-            'password'=>bcrypt('password')
-        ]);
+    //     User::create([
+    //         'name' => 'Staff',
+    //         'email' => 'staff@app.com',
+    //         'profession'=>'Staff',
+    //         'password'=>bcrypt('password')
+    //     ]);
+    //     User::create([
+    //         'name' => 'Student',
+    //         'email' => 'student@app.com',
+    //         'profession'=>'Student',
+    //         'password'=>bcrypt('password')
+    //     ]);
 
 
-        // User::factory(10)->create();
+    //     // User::factory(10)->create();
          
-        // Ticket::factory(50)->create();
+    //     // Ticket::factory(50)->create();
 
-        $user = User::factory(10)->create();
+    //     $user = User::factory(10)->create();
 
-        Ticket::factory(50)
-        ->recycle($user)
-        ->create();
-
-
-        Course::create([
-            'course_name' => 'First Course',
-        ]);
-        Course::create([
-
-            'course_name' => 'Second Course',
-
-        ]);
-        Course::create([
-
-            'course_name' => 'Third Course',
-
-        ]);
-        Course::create([
-
-            'course_name' => 'Fourth Course ',
-
-        ]);
-        Course::create([
-
-            'course_name' => 'Fifth Course',
-
-        ]);
-        Course::create([
-
-            'course_name' => 'Sixth Course',
-        ]);
+    //     Ticket::factory(50)
+    //     ->recycle($user)
+    //     ->create();
 
 
-       CourseDetails::factory(20)->create();
-       EnrolledStudents::factory(20)->create();
+    //     Course::create([
+    //         'course_name' => 'First Course',
+    //     ]);
+    //     Course::create([
+
+    //         'course_name' => 'Second Course',
+
+    //     ]);
+    //     Course::create([
+
+    //         'course_name' => 'Third Course',
+
+    //     ]);
+    //     Course::create([
+
+    //         'course_name' => 'Fourth Course ',
+
+    //     ]);
+    //     Course::create([
+
+    //         'course_name' => 'Fifth Course',
+
+    //     ]);
+    //     Course::create([
+
+    //         'course_name' => 'Sixth Course',
+    //     ]);
+
+
+    //    CourseDetails::factory(20)->create();
+    //    EnrolledStudents::factory(20)->create();
         
        LabsData::factory(30)->create();
         

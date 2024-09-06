@@ -66,8 +66,8 @@ class AuthController extends Controller
         return $this->error("register", 401);
     }
 
-    public function getUserDetails(Request $request) {
-        $user = auth()->user();
+    public function getUserDetails() {
+        $user = auth();
         return $user;
     }
 }
