@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import FileUpload from "./FileUpload";
+import ViewFile from "../Staff/ViewFile";
 
 const token = localStorage.getItem("token");
 
@@ -105,7 +106,11 @@ const SessionDetails = ({ courseId, userId }) => {
           <div
             key={courseDetail.id}
             className="p-2 mb-1 border rounded bg-light"
-            onClick={() => handleExpand(courseDetail.id)}
+             onClick={() => handleExpand(courseDetail.id)}
+            // onClick={(e) => {
+            //   e.stopPropagation();
+            //   handleExpand(courseDetail.id);
+            // }}
           >
             <div className="row">
               <div className="col text-right">{courseDetail.session_no}</div>
@@ -115,7 +120,7 @@ const SessionDetails = ({ courseId, userId }) => {
             {expandedSessionId === courseDetail.id && (
               <div className="mt-2">
                 {labDetailLength === 1 ? (
-                  <>
+                  <div onClick={(e) => { e.stopPropagation(); }}>
                     <p>
                       Uploaded At:{" "}
                       {new Date(
@@ -128,7 +133,9 @@ const SessionDetails = ({ courseId, userId }) => {
 
                     <p>Comment : {labDetails.attributes.comment}</p>
                     <p>Status : {labDetails.attributes.status}</p>
-                  </>
+
+                    <ViewFile filename={labDetails.attributes.title}/>
+                  </div>
                 ) : (
                   <>
                     {view === true && (

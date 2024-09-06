@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { toast } from 'react-toastify';
+import { Button, Modal } from 'react-bootstrap';
+import ViewFile from "./ViewFile";
 
 const token = localStorage.getItem("token");
+
 
 const StudentsLabDetails = ({ sessionId }) => {
   const [labsData, setLabsData] = useState([]);
@@ -11,6 +15,22 @@ const StudentsLabDetails = ({ sessionId }) => {
   const [expandedSessionId, setExpandedSessionId] = useState(null);
   const [comments, setComments] = useState({});
   const [editingCommentId, setEditingCommentId] = useState(null);
+
+  const [acceptButton, setAcceptButton]=useState();
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleViewFileClick = (e) => {
+    e.stopPropagation();
+    setModalOpen(true); // Open the modal when the button is clicked
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false); // Close the modal
+  };
+
+
+
 
   const getCourseDetails = `http://127.0.0.1:8000/api/labsData?filter[sessionId]=${sessionId.id}`;
 
@@ -34,36 +54,69 @@ const StudentsLabDetails = ({ sessionId }) => {
     fetchCourseDetails();
   }, [sessionId]);
 
-  const handleExpand = (sessionId) => {
+  const handleExpand = (sessionId, labData) => {
     setExpandedSessionId(expandedSessionId === sessionId ? null : sessionId);
+    setAcceptButton(labData.attributes.status);
   };
 
-  const handleButtonClick = (message, sessionId) => {
-    console.log(message, sessionId);
-  };
-
-  const handleCommentChange = (e, labId) => {
-    setComments({ ...comments, [labId]: e.target.value });
-  };
-
-  const handleCommentSubmit = async (labId) => {
+  const handleButtonClick = async (message, labdata) => {
+    console.log(message, labdata);
+    const id=labdata.id;
+    console.log(id);
+    const data = {
+      data:{
+        attributes : {
+          id : id,
+          status : "Completed"
+      } 
+      }
+    }
     try {
-      const response = await axios.post(
-        `http://127.0.0.1:8000/api/updateComment`,
-        {
-          labId: labId,
-          comment: comments[labId] || "",
-        },
-        {
+      const response = await axios.patch(`http://127.0.0.1:8000/api/labsData`, data,{
           headers: {
             Authorization: "Bearer " + token,
           },
         }
       );
+      setAcceptButton("Completed");
+     // toast.success("Comment submitted successfully");
+      console.log(" submitted successfully", response.data);
+    } catch (err) {
+       toast.error("Error submitting comment:", err.message);
+    }
+  };
+
+
+  const handleCommentChange = (e, labId) => {
+    setComments({ ...comments, [labId]: e.target.value });
+
+  };
+
+  const handleCommentSubmit = async (labdata) => {
+    
+    const id=labdata.id;
+    console.log(id);
+    const data = {
+      data:{
+        attributes : {
+          id : id,
+          comment : comments[id]
+      } 
+      }
+    }
+    try {
+      const response = await axios.patch(`http://127.0.0.1:8000/api/labsData`, data,{
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      toast.success("Comment submitted successfully");
       console.log("Comment submitted successfully", response.data);
       setEditingCommentId(null);
     } catch (err) {
-      console.error("Error submitting comment:", err.message);
+      toast.error("Error submitting comment:", err.message);
     }
   };
 
@@ -98,7 +151,7 @@ const StudentsLabDetails = ({ sessionId }) => {
               <React.Fragment key={labData.id}>
                 <tr
                   className="table-light"
-                  onClick={() => handleExpand(labData.id)}
+                  onClick={() => handleExpand(labData.id, labData)}
                   style={{ cursor: "pointer" }}
                 >
                   <td>{index + 1}</td>
@@ -124,7 +177,7 @@ const StudentsLabDetails = ({ sessionId }) => {
                               className="btn btn-primary btn-sm me-2"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleCommentSubmit(labData.id);
+                                handleCommentSubmit(labData);
                               }}
                             >
                               Save Comment
@@ -153,8 +206,10 @@ const StudentsLabDetails = ({ sessionId }) => {
                             </button>
                           </>
                         )}
-                        <p>Status: {labData.attributes.status}</p>
-                        <button
+                        <p>Status: {acceptButton} </p>
+
+                        {acceptButton.includes('Request') && (
+                          <button
                           className="btn btn-success btn-sm"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -163,6 +218,10 @@ const StudentsLabDetails = ({ sessionId }) => {
                         >
                           Accept
                         </button>
+                        )}
+                        
+                          <ViewFile filename={labData.attributes.title}/>
+   
                       </div>
                     </td>
                   </tr>

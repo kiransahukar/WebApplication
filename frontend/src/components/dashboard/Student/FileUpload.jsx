@@ -32,17 +32,16 @@ const FileUpload = ({userId, sessionId, setExpandedSessionId}) => {
       });
       
       const data = {
-        data:{
-          attributes : {
-            user_id : userId,
-            session_id : sessionId,
-            title :response.data.data,
-            comment : "No Comments",
-            status:"Pending"
-        } 
-        }
-       
-      }
+        data: {
+          attributes: {
+            user_id: userId,
+            session_id: sessionId,
+            title: response.data.data,
+            comment: "No Comments",
+            status: "Pending",
+          },
+        },
+      };
       const response1 = await axios.post('http://127.0.0.1:8000/api/labsData', data, {
         headers: {
           Authorization:"Bearer "+token
