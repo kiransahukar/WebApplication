@@ -19,7 +19,7 @@ final class Abilities {
     public const DeleteUser = 'user:delete';
 
     public static function getAbilities(User $user) {
-        if ($user->profession ==="Admin") {
+        if ($user->profession==="Admin") {
             return [
                 self::CreateTicket,
                 self::UpdateTicket,

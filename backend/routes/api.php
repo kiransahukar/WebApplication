@@ -15,6 +15,7 @@ use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\AuthorTicketsController;
 use App\Http\Controllers\FileController\FileController;
 use App\Http\Controllers\LabsData\LabsDataController;
+use App\Http\Controllers\UserController;
 use App\Livewire\Actions\Logout;
 
 use App\Models\Ticket;
@@ -43,6 +44,12 @@ Route::middleware(['auth:sanctum'])->post('/logout',[AuthController::class, 'log
 
 
 Route::middleware(['auth:sanctum'])->group(function(){
+
+    Route::apiResource('users',UserController::class);
+    Route::put('users/{user}',[UserController::class,'replace']);
+    Route::patch('users/{user}',[UserController::class,'update']);
+
+
     Route::apiResource('authors',AuthorsController::class);
     Route::apiResource('authors.tickets',AuthorTicketsController::class)->except(['update']);
     Route::put('authors/{author}/tickets/{ticket}',[AuthorTicketsController::class,'replace']);//put
@@ -57,7 +64,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
         return $request->user();
     });
 });
-
 
 Route::middleware(['auth:sanctum'])->apiResource('courses',CourseController::class);
 Route::middleware(['auth:sanctum'])->apiResource('courses.courseDetails',AllCourseController::class);
