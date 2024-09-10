@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\EnrolledStudents;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -31,7 +32,7 @@ class UserResource extends JsonResource
             ])
             ],
         'includes'=>  TicketResource::collection($this->whenLoaded('tickets')),
-
+        'courses' => EnrolledStudentsResource::collection($this->whenLoaded('courses')),
         'links'=>[
             'self'=>route('authors.show',['author'=>$this->id]),
         ]

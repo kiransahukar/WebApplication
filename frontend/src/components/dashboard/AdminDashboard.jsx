@@ -2,38 +2,55 @@ import React, { useState } from "react";
 
 import { Button, Container, Row, Col } from "react-bootstrap";
 import CreateUser from "./Admin/CreateUser";
-import EnrollStaff from "./Admin/EnrollStaff";
+import Enroll from "./Admin/Enroll";
+import RemoveEnroll from "./Admin/RemoveEnroll";
 import EnrollStudent from "./Admin/EnrollStudent";
+import Manage from "./Admin/Manage";
+import ViewUsers from "./Admin/ViewUsers";
+import ViewCourse from "./Admin/ViewCourse";
+import Filter from "../Filter/Filter";
 
 const AdminDashboard = () => {
+
+  const [mainContent, setMainContent] = useState("Manage");
+
+
+const handelMainContent=(content) =>{
+  setMainContent(content);
+}
+
+
   return (
     <Container fluid>
-      <Row className="mb-4">
-        <Col md={10} className="mainContent">
-          <h2>Create User</h2>
-          <CreateUser />
+      <Row >
+        <Col xs={3} className="bg-light">
+          <div className="d-flex flex-column">
+            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+                                e.stopPropagation();
+                                handelMainContent("Manage");
+                              }}>
+              Manage
+            </Button>
+            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+                                e.stopPropagation();
+                                handelMainContent("Course");
+                              }}>
+              Course
+            </Button>
+            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+                                e.stopPropagation();
+                                handelMainContent("Users");
+                              }}>
+              Users
+            </Button>
+          </div>
         </Col>
-      </Row>
 
-      <Row className="mb-4">
-        <Col md={10} className="mainContent">
-          <h2>Enroll User</h2>
-          {/* <EnrollStaff />
-      <EnrollStudent /> */}
-          <Row className="mb-3">
-            <EnrollStaff />
-          </Row>
-          <Row className="mb-3">
-            <EnrollStudent />
-          </Row>
-        </Col>
-      </Row>
-
-      <Row className="mb-4">
-        <Col md={10} className="mainContent">
-          <h2>Manage Users</h2>
-          {/* <SeeUsers />
-      <DeleteUser /> */}
+        <Col xs={12} md={9} className="p-3 border  bg-light">
+          {mainContent === "Manage" && <Manage />}
+          {mainContent === "Course" && <ViewCourse />}
+          {mainContent === "Users" && <ViewUsers />}
+         
         </Col>
       </Row>
     </Container>
@@ -41,3 +58,5 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+

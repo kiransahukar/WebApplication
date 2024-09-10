@@ -55,6 +55,9 @@ class User extends Authenticatable
     public function tickets(): HasMany {
         return $this->hasMany(Ticket::class);
     }
+    public function courses(): HasMany {
+        return $this->hasMany(EnrolledStudents::class);
+    }
 
 
     public function scopeFilter(Builder $builder, QueryFilter $filters) {

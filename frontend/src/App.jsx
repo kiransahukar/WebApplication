@@ -9,6 +9,7 @@ import Filter from './components/Filter/Filter.jsx';
 import Login from './pages/Login/Login.jsx';
 import Logout from './pages/Login/Logout.jsx';
 import { ToastContainer } from 'react-toastify';
+import Notes from './components/Notes/Notes.jsx';
 
 
 
@@ -34,6 +35,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/home" element={<Dashboard />}/>
             <Route path="/profile" element={<Profile />}/>
+            <Route path="/notes" element={<Notes />}/>
             <Route path="/filter" element={<Filter />}/>
           </Route>
           <Route path="/login" element={<Login />}/>

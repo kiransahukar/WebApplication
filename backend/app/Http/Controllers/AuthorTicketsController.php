@@ -23,17 +23,17 @@ class AuthorTicketsController extends ApiController
      */
     public function store($author_id, StoreTicketRequest $request)
     {   
+      
+      return new TicketResource(Ticket::create($request->
+      mappedAttributes(['user_id'=> $author_id])));
         
-        
-        // $model = [
-        //     'title' => $request->input('data.attributes.title'),
-        //     'description' =>  $request->input('data.attributes.description'),
-        //     'status' =>  $request->input('data.attributes.status'),
-        //     'user_id' =>  $author_id,
-        // ];
+      if ($this->isAble('store', Ticket::class)) {
+        return new TicketResource(Ticket::create($request->mappedAttributes([
+            'author' => $author_id
+        ])));
+    }
 
-
-        return new TicketResource(Ticket::create($request->mappedAttributes()));
+    return $this->notAuthorized('You are not authorized to create that resource');
   }
 
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\CourseControllers\CourseDetailsController;
 use App\Http\Controllers\Enrolled\EnrolledStudentController;
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\AuthorTicketsController;
+use App\Http\Controllers\Enrolled\EnrolledStaffController;
 use App\Http\Controllers\FileController\FileController;
 use App\Http\Controllers\LabsData\LabsDataController;
 use App\Http\Controllers\UserController;
@@ -66,6 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 });
 
 Route::middleware(['auth:sanctum'])->apiResource('courses',CourseController::class);
+//Route::middleware(['auth:sanctum'])->delete('courses',CourseController::class);
 Route::middleware(['auth:sanctum'])->apiResource('courses.courseDetails',AllCourseController::class);
 
 Route::middleware(['auth:sanctum'])->apiResource('courseDetails',CourseDetailsController::class);
@@ -73,6 +75,11 @@ Route::middleware(['auth:sanctum'])->patch('courseDetails',[CourseDetailsControl
 Route::middleware(['auth:sanctum'])->delete('courseDetails',[CourseDetailsController::class,'destroy']);
 
 Route::middleware(['auth:sanctum'])->apiResource('enrolledStudents',EnrolledStudentController::class);
+Route::middleware(['auth:sanctum'])->delete('enrolledStudents',[EnrolledStudentController::class,'delete']);
+
+Route::middleware(['auth:sanctum'])->apiResource('enrolledStaff',EnrolledStaffController::class);
+Route::middleware(['auth:sanctum'])->delete('enrolledStaff',[EnrolledStaffController::class,'delete']);
+
 
 Route::middleware(['auth:sanctum'])->apiResource('labsData',LabsDataController::class)->except(['update']);
 Route::middleware(['auth:sanctum'])->patch('labsData',[LabsDataController::class,'update']);

@@ -4,22 +4,26 @@ namespace App\Http\Controllers\Enrolled;
 
 use App\Models\EnrolledStudents;
 use App\Http\Controllers\ApiController;
-use App\Http\Requests\Enrolled\StoreEnrolledRequest;
+use App\Http\Requests\StoreEnrolledStudentsRequest;
 use App\Http\Requests\Enrolled\UpdateEnrolledStudentsRequest;
-use App\Http\Resources\EnrolledStudentsResource;
+use App\Http\Resources\EnrolledStaffResource;
 use App\Http\Filters\EnrolledFilter;
+use App\Http\Requests\Enrolled\StoreEnrolledRequest;
 use App\Models\Course;
+use App\Models\Enrolled_Staff;
+use App\Models\EnrolledStaff;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Client\Request;
 
-class EnrolledStudentController extends ApiController
+class EnrolledStaffController extends ApiController
 {
     /**
      * Display a listing of the resource.
      */
     public function index(EnrolledFilter $filter)
     {
-        return  EnrolledStudentsResource::collection(EnrolledStudents::filter($filter)->paginate());
+        return  EnrolledStaffResource::collection(EnrolledStaff::filter($filter)->paginate());
     }
 
     /**
@@ -39,18 +43,21 @@ class EnrolledStudentController extends ApiController
             $user=User::findOrFail($request->input('data.attributes.userId'));
             $course=Course::findOrFail($request->input('data.attributes.courseId'));
 
-            $enrollData= EnrolledStudents::where('user_id', $request->input('data.attributes.userId'))
+            $enrollData= EnrolledStaff::where('user_id', $request->input('data.attributes.userId'))
             ->where('course_id', $request->input('data.attributes.courseId'))->exists();
 
             if($enrollData) {
                 return $this->error( "Provided user Id or course Id   exists",406);
             }
-
-
+            if($user->profession === "Staff") {
+                return new EnrolledStaffResource(EnrolledStaff::create($request->mappedAttributes()));
+            } else {
+                return $this->error("User is not Staff. ",406);
+            }
         }catch(ModelNotFoundException $exception) {
-           return $this->error("Provided user id or course Id does not exists",406);
+           return $this->error( "Provided user Id or course Id does not match",406);
         }
-        return new EnrolledStudentsResource(EnrolledStudents::create($request->mappedAttributes()));
+       // return new EnrolledStaffResource(EnrolledStaff::create($request->mappedAttributes()));
     }
 
     /**
@@ -61,9 +68,9 @@ class EnrolledStudentController extends ApiController
         if($this->include('course')) {
 
             
-            return new EnrolledStudentsResource($enrolledStudents->load('course'));
+            return new EnrolledStaffResource($enrolledStudents->load('course'));
         }
-        return new EnrolledStudentsResource($enrolledStudents);
+        return new EnrolledStaffResource($enrolledStudents);
     }
 
     /**
@@ -89,19 +96,20 @@ class EnrolledStudentController extends ApiController
     {
         try {
            
-            $check = EnrolledStudents::where('user_id', $request->input('data.attributes.userId'))
+            $check = EnrolledStaff::where('user_id', $request->input('data.attributes.userId'))
                 ->where('course_id', $request->input('data.attributes.courseId'))->exists();
             
             if ($check) {
-                $ticket = EnrolledStudents::where('user_id', $request->input('data.attributes.userId'))
-                ->where('course_id', $request->input('data.attributes.courseId'));
+                
+            $ticket = EnrolledStaff::where('user_id', $request->input('data.attributes.userId'))
+            ->where('course_id', $request->input('data.attributes.courseId'));
                 $ticket->delete(); 
-                return $this->ok('Deleted successfully');
+                return $this->ok('LabsData successfully deleted');
             } else {
-                return $this->error('Does  not match.', 404);
+                return $this->error('Does not  match.', 404);
             }
         } catch (ModelNotFoundException $exception) {
-            return $this->error(' cannot be found.', 404);
+            return $this->error('Cannot  found.', 404);
         }
         
     }

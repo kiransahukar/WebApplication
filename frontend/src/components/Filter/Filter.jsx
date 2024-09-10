@@ -1,47 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { toast } from 'react-toastify';
 
-const Filter = ({ setAddFilter }) => {
+
+const token =localStorage.getItem('token');
+const Filter = (data) => {
   const [filter, setFilter] = useState('');
   const [filterBy, setFilterBy] = useState('');
+  const [userData, setUserData] = useState();
 
+  const filterApi = `http://127.0.0.1:8000/api/authors`;
 
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const response = await axios.get(filterApi, {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        });
+        setUserData(response.data.data);
+       // setFilteredSessions(response.data.data); 
+      } catch (error) {
+        console.error('Error fetching sessions:', error);
+      }
+    };
 
-
-
-  // useEffect(() => {
-  //   const fetchSessions = async () => {
-  //     try {
-  //       const response = await axios.get(filterApi, {
-  //         headers: {
-  //           Authorization: "Bearer " + token
-  //         }
-  //       });
-  //       setData(response.data.data);
-  //      // setFilteredSessions(response.data.data); 
-  //     } catch (error) {
-  //       console.error('Error fetching sessions:', error);
-  //     }
-  //   };
-
-  //   fetchSessions();
-  // }, [filterApi]);
+    fetchSessions();
+  }, [filterApi]);
 
   const handleFilterChange = (e) => {
     const filterValue = e.target.value;
     setFilter(filterValue);
-    if (filterBy === '') {
-      setAddFilter('');
-    } else {
-      setAddFilter(`?filter[${filterBy}]=${filterValue}`);
-    }
+
   };
 
   const handleFilterByChange = (e) => {
     setFilterBy(e.target.value);
-    if (e.target.value === '') {
-      setAddFilter('');
-    }
   };
 
   return (

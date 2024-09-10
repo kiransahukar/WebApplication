@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Enrolled;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEnrolledStudentsRequest extends FormRequest
+class StoreEnrolledRequest extends BaseEnrolledRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreEnrolledStudentsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'data.attributes.courseId' => 'required|integer',
+            'data.attributes.userId'=>'required|integer',
         ];
     }
 }

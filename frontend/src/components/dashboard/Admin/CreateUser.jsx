@@ -56,7 +56,7 @@ function CreateUser() {
 
   return (
     <div>
-      <Button variant="primary" onClick={handleOpen}>
+      <Button variant="outline-primary" onClick={handleOpen}>
         Create User
       </Button>
 
@@ -109,13 +109,13 @@ function CreateUser() {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant="outline-success" type="submit">
               Submit
             </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="outline-secondary" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>

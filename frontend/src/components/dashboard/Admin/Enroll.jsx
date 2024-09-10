@@ -4,14 +4,23 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const token =localStorage.getItem('token');
-function EnrollStudent() {
+function Enroll() {
   const [show, setShow] = useState(false);
   const [enrollDetails, setEnrollDetails] = useState({
     userId: null,
     courseId:null,
   });
+  const [enrollType, setEnrollType] = useState("");
+  const handleOpen = () => {
 
-  const handleOpen = () => setShow(true);
+    setShow(true);
+    setEnrollType("Staff");
+  }
+  const handleOpen1 = () => {
+
+    setShow(true);
+    setEnrollType("Student");
+  }
   const handleClose = () => setShow(false);
 
   const handleChange = (e) => {
@@ -21,6 +30,10 @@ function EnrollStudent() {
       [name]: value,
     }));
   };
+
+
+  const staff="http://127.0.0.1:8000/api/enrolledStaff";
+  const student="http://127.0.0.1:8000/api/enrolledStudents";
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -33,9 +46,10 @@ function EnrollStudent() {
       } 
     };
       try {
-        const response = await axios.post("http://127.0.0.1:8000/api/enrolledStudents",userData ,{
+
+        const response = await axios.post(enrollType === "Staff"?  staff : student,userData ,{
           headers: {
-            Authorization:"Bearer "+ token
+            Authorization:"Bearer "+ token,
           }
         });
         toast.success("Enrolled successful!");
@@ -52,9 +66,14 @@ function EnrollStudent() {
   };
   return (
     <div>
-      <Button variant="primary" onClick={handleOpen}>
-        Enroll Student 
-      </Button>
+      <div className="d-flex justify-content-center align-items-center gap-2">
+        <Button variant="outline-primary" onClick={handleOpen}>
+          Enroll Staff
+        </Button>
+        <Button variant="outline-primary" onClick={handleOpen1}>
+          Enroll Student
+        </Button>
+      </div>
 
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Body>
@@ -70,7 +89,7 @@ function EnrollStudent() {
                 required
               />
             </Form.Group>
-            
+
             <Form.Group className="mb-3" controlId="formCourseId">
               <Form.Label>course Id</Form.Label>
               <Form.Control
@@ -97,4 +116,4 @@ function EnrollStudent() {
   );
 }
 
-export default EnrollStudent;
+export default Enroll;

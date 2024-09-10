@@ -4,14 +4,24 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const token =localStorage.getItem('token');
-function EnrollStudent() {
+
+function RemoveEnroll() {
   const [show, setShow] = useState(false);
   const [enrollDetails, setEnrollDetails] = useState({
-    userId: null,
-    courseId:null,
+    userId: 0,
+    courseId:0,
   });
+  const [enrollType, setEnrollType] = useState("");
+  const handleOpen = () => {
 
-  const handleOpen = () => setShow(true);
+    setShow(true);
+    setEnrollType("Staff");
+  }
+  const handleOpen1 = () => {
+
+    setShow(true);
+    setEnrollType("Student");
+  }
   const handleClose = () => setShow(false);
 
   const handleChange = (e) => {
@@ -22,10 +32,14 @@ function EnrollStudent() {
     }));
   };
 
+
+  const staff="http://127.0.0.1:8000/api/enrolledStaff";
+  const student="http://127.0.0.1:8000/api/enrolledStudents";
+  
   const handleSubmit = async(e) => {
     e.preventDefault();
     const userData = { 
-      data: {
+      data:{
         attributes:{
           userId: enrollDetails.userId,
           courseId: enrollDetails.courseId,
@@ -33,18 +47,21 @@ function EnrollStudent() {
       } 
     };
       try {
-        const response = await axios.post("http://127.0.0.1:8000/api/enrolledStudents",userData ,{
-          headers: {
-            Authorization:"Bearer "+ token
-          }
-        });
-        toast.success("Enrolled successful!");
+        const response = await axios.delete(enrollType === "Staff"?  staff : student,{
+            headers: {
+              Authorization:"Bearer "+ token
+            },
+            params: userData,
+          });
+        toast.success("Deleted successful!");
         setEnrollDetails({
           userId: null,
           courseId: null,
         });
       } catch (err) {
-        toast.error(err.response.data.message +"  Please try again.");
+        console.log(err)
+        console.log(err.response.data.message)
+        toast.error(err.response.data.message +" Please try again.");
       } 
   
 
@@ -52,9 +69,14 @@ function EnrollStudent() {
   };
   return (
     <div>
-      <Button variant="primary" onClick={handleOpen}>
-        Enroll Student 
-      </Button>
+      <div className="d-flex justify-content-center align-items-center gap-2">
+        <Button variant="outline-danger" onClick={handleOpen}>
+          Delete Staff
+        </Button>
+        <Button variant="outline-danger" onClick={handleOpen1}>
+          Delete Student
+        </Button>
+      </div>
 
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Body>
@@ -70,7 +92,7 @@ function EnrollStudent() {
                 required
               />
             </Form.Group>
-            
+
             <Form.Group className="mb-3" controlId="formCourseId">
               <Form.Label>course Id</Form.Label>
               <Form.Control
@@ -97,4 +119,4 @@ function EnrollStudent() {
   );
 }
 
-export default EnrollStudent;
+export default RemoveEnroll;

@@ -8,7 +8,7 @@ class BaseTicketRequest extends FormRequest
 {
     
 
-    public function mappedAttributes() {
+    public function mappedAttributes(array $otherAttributes = []) {
 
         $attributes = [
             'data.attributes.title' => 'title',
@@ -26,8 +26,11 @@ class BaseTicketRequest extends FormRequest
                     $attributesToUpdate[$attribute] = $this->input($key);
                 }
             }
+                
+          //  return $attributesToUpdate;
 
-            return $attributesToUpdate;
+
+            return array_merge($otherAttributes, $attributesToUpdate);
     }
    
 
