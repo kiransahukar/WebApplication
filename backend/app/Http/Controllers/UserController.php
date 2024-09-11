@@ -22,9 +22,17 @@ class UserController extends ApiController
      */
     public function index(AuthorFilter $filters)
     {
+
+        return UserResource::collection(
+            User::filter($filters)->get()
+        );
+        
         return UserResource::collection(
             User::filter($filters)->paginate()
         );
+
+
+       
     }
 
     /**

@@ -12,7 +12,11 @@ const ViewUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [show, setShow] = useState(false);
 
-  const filterApi = `http://127.0.0.1:8000/api/authors`;
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 15; 
+
+  const filterApi = `http://127.0.0.1:8000/api/users`;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -45,13 +49,27 @@ const ViewUsers = () => {
     });
 
     setFilteredUsers(filtered);
+    setCurrentPage(1); 
   };
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
     setShow(true);
   };
+
   
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+  
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="container mt-4">
       <ToastContainer />
@@ -69,7 +87,7 @@ const ViewUsers = () => {
         </div>
       </div>
 
-      {filteredUsers.length > 0 ? (
+      {currentUsers.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-striped">
             <thead>
@@ -80,7 +98,7 @@ const ViewUsers = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user) => (
+              {currentUsers.map((user) => (
                 <tr key={user.id} onClick={() => handleUserClick(user)} style={{ cursor: 'pointer' }}>
                   <td>{user.id}</td>
                   <td>{user.attributes.name}</td>
@@ -94,7 +112,27 @@ const ViewUsers = () => {
         <p className="text-center">No users found.</p>
       )}
 
-      {/* Modal for displaying user details */}
+      
+      {filteredUsers.length > usersPerPage && (
+        <div className="d-flex justify-content-center">
+          <nav>
+            <ul className="pagination">
+              {[...Array(totalPages)].map((_, i) => (
+                <li
+                  key={i}
+                  className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}
+                  onClick={() => handlePageChange(i + 1)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <span className="page-link">{i + 1}</span>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
+
+     
       {selectedUser && (
         <UserDetails user={selectedUser} show={show} setShow={setShow} />
       )}
