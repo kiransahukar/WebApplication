@@ -208,7 +208,7 @@ const StudentsLabDetails = ({ sessionId }) => {
                         )}
                         <p>Status: {acceptButton} </p>
 
-                        {acceptButton.includes('Request') && (
+                        {(acceptButton.includes('Request')||acceptButton.includes('Pending')) && (
                           <button
                           className="btn btn-success btn-sm"
                           onClick={(e) => {

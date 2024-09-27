@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+const token = localStorage.getItem("token");
 
 const Profile = () => {
   const [profile, setProfile] = useState({});
@@ -15,12 +16,20 @@ const Profile = () => {
 
   const userDetails=useSelector((state)=>state.user.value);
 
-  console.log(userDetails)
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/profile'); // Replace with your API endpoint
-        setProfile(response.data);
+
+
+        const response = await axios.get(`http://127.0.0.1:8000/api/users/${userDetails.userId}`,{
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+        setProfile(response.data.data);
+        console.log(response.data)
       } catch (err) {
         setError(err.message);
       } finally {
@@ -29,7 +38,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [userDetails]);
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -40,7 +49,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/change-password', {
+      const response = await axios.post('http://127.0.0.1:8000/api/changePassword', {
         currentPassword,
         newPassword,
       });
@@ -73,17 +82,17 @@ const Profile = () => {
         <strong>Id:</strong> {userDetails.userId}
       </div>
       <div style={styles.profileItem}>
-        <strong>Name:</strong> {profile.name}
+        <strong>Name:</strong> {profile.attributes.name}
       </div>
       <div style={styles.profileItem}>
-        <strong>Email:</strong> {profile.email}
+        <strong>Email:</strong> {profile.attributes.email}
+      </div>
+      {/* <div style={styles.profileItem}>
+        <strong>Phone:</strong> {profile.attributes.phone}
       </div>
       <div style={styles.profileItem}>
-        <strong>Phone:</strong> {profile.phone}
-      </div>
-      <div style={styles.profileItem}>
-        <strong>Address:</strong> {profile.address}
-      </div>
+        <strong>Address:</strong> {profile.attributes.address}
+      </div> */}
 
       <button onClick={() => setShowChangePassword(!showChangePassword)} style={styles.button}>
         Change Password
