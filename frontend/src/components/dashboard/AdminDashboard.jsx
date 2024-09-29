@@ -49,7 +49,7 @@ const handelMainContent=(content) =>{
                               }}>
               Users
             </Button>
-            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+            {/* <Button variant="outline-dark" className="m-1" onClick={(e) => {
                                 e.stopPropagation();
                                 handelMainContent("Chat");
                               }}>
@@ -60,12 +60,12 @@ const handelMainContent=(content) =>{
                                 handelMainContent("PChat");
                               }}>
               PrivateChat
-            </Button>
+            </Button> */}
             <Button variant="outline-dark" className="m-1" onClick={(e) => {
                                 e.stopPropagation();
                                 handelMainContent("GChat");
                               }}>
-              GroupChat
+              Message
             </Button>
           </div>
         </Col>

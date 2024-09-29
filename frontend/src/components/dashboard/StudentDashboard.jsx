@@ -80,7 +80,7 @@ const StudentDashboard = () => {
       </Offcanvas>
       <Offcanvas show={isLeftVisible} onHide={toggleLeftComponent} placement="start">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Messages</Offcanvas.Title>
+          <Offcanvas.Title>Enrolled Courses</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
         <CourseDetails

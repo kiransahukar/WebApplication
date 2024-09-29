@@ -46,7 +46,7 @@ const ViewCourse = () => {
 
   return (
     <div className="container ">
-      <h2>Student Dashboard </h2>
+      <h2>Courses </h2>
       <div className="p-2 mb-1 border rounded bg-light ">
         <div className="d-flex flex-column">
           <div className="row font-weight-bold">

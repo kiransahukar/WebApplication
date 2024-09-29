@@ -62,7 +62,6 @@ if (error) {
     <div className={isVisible ? 'd-block' : 'd-none'}>
       <div className="card shadow-lg">
         <div className="card-header p-1 mb-0 mt-1  border rounded font-weight-bold text-black">
-        <h2 className="mb-1">Left Component</h2>
         <p>This is about course details.</p>
 
         </div>

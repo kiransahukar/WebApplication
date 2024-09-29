@@ -50,7 +50,7 @@ const StaffCourseDetails = ({ isVisible, selectedDetails, content, sessionDetail
 
   return (
     <div className={`container ${isVisible ? 'd-block' : 'd-none'}`}>
-  <h2 className="my-2">Staff Course Details</h2>
+  {/* <h2 className="my-2">Staff Course Details</h2> */}
   <p>This is about course details.</p>
   <div className="row mb-1">
     <div className="col-6 font-weight-bold text-right">Course ID:</div>

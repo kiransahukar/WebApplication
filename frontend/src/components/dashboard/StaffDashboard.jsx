@@ -61,7 +61,7 @@ const StaffDashboard = () => {
 
         <Offcanvas show={isLeftVisible} onHide={toggleLeftComponent} placement="start">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Staff </Offcanvas.Title>
+          <Offcanvas.Title>Courses </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
         <StaffCourseDetails

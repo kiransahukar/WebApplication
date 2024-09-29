@@ -101,6 +101,9 @@ const SessionDetails = ({ courseId, userId }) => {
           </div>
         </div>
       </div>
+
+    
+    
       <div>
         {courseDetails.data.map((courseDetail) => (
           <div
@@ -162,6 +165,8 @@ const SessionDetails = ({ courseId, userId }) => {
           </div>
         ))}
       </div>
+           
+              
     </div>
   );
 };
