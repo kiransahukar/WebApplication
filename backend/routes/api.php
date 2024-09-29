@@ -13,6 +13,7 @@ use App\Http\Controllers\CourseControllers\CourseDetailsController;
 use App\Http\Controllers\Enrolled\EnrolledStudentController;
 use App\Http\Controllers\AuthorsController;
 use App\Http\Controllers\AuthorTicketsController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Enrolled\EnrolledStaffController;
 use App\Http\Controllers\FileController\FileController;
 use App\Http\Controllers\LabsData\LabsDataController;
@@ -88,7 +89,16 @@ Route::middleware(['auth:sanctum'])->put('labsData',[LabsDataController::class,'
 
 Route::post('file',[FileController::class,'store']);
 Route::get('/getfile/{filename}', [FileController::class, 'getFile']);
+Route::delete('/deleteFile/{filename}', [FileController::class, 'destroy']);
 
 
+Route::post('/sendmessage', [ChatController::class, 'sendMessage']);
+// Route to send a private message
+Route::post('/send-private-message', [ChatController::class, 'sendPrivateMessage']);
 
+// Route to send a group message
+Route::post('/send-group-message', [ChatController::class, 'sendGroupMessage']);
+
+
+Route::get('/group-messages/{groupId}', [ChatController::class, 'getGroupMessages']);
 //Route::post('/file', [FileController::class, 'store'])->name('file');

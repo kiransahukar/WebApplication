@@ -8,15 +8,18 @@ import Update from "./Staff/Update";
 import StudentsLabDetails from "./Staff/StudentsLabDetails";
 import { Button, Container, Row, Col, Offcanvas } from 'react-bootstrap';
 import Delete from "./Staff/Delete";
+import GroupChat from "../Chat/GroupChat";
+import { useSelector } from "react-redux";
 
 const StaffDashboard = () => {
-  const [isLeftVisible, setIsLeftVisible] = useState(true);
+  const [isLeftVisible, setIsLeftVisible] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(1);
   const [selectedSession, setSelectedSession] = useState();
   const [mainContent, setMainContent] = useState("StudentsDetails");
   const [sessionDetails, setSessionDetail] = useState(null);
   const [isRightVisible, setIsRightVisible] = useState(false);
 
+  const userId = useSelector((state)=>state.user.value.userId);
   const toggleLeftComponent = () => {
     setIsLeftVisible(!isLeftVisible);
   };
@@ -75,7 +78,9 @@ const StaffDashboard = () => {
           <Offcanvas.Title>Messages</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <RightComponent />
+        <GroupChat
+          isVisible={isRightVisible}
+          currentUser={userId}/>
         </Offcanvas.Body>
       </Offcanvas>
 

@@ -9,11 +9,17 @@ import Manage from "./Admin/Manage";
 import ViewUsers from "./Admin/ViewUsers";
 import ViewCourse from "./Admin/ViewCourse";
 import Filter from "../Filter/Filter";
+import ChatComponent from "../Chat/ChatComponent";
+import PrivateChat from "../Chat/PrivateChat";
+import GroupChat from "../Chat/GroupChat";
+import { useSelector } from "react-redux";
 
 const AdminDashboard = () => {
 
+  
+  const userId = useSelector((state)=>state.user.value.userId);
   const [mainContent, setMainContent] = useState("Manage");
-
+  const isVisible = true ;
 
 const handelMainContent=(content) =>{
   setMainContent(content);
@@ -43,6 +49,24 @@ const handelMainContent=(content) =>{
                               }}>
               Users
             </Button>
+            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+                                e.stopPropagation();
+                                handelMainContent("Chat");
+                              }}>
+              Chat
+            </Button>
+            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+                                e.stopPropagation();
+                                handelMainContent("PChat");
+                              }}>
+              PrivateChat
+            </Button>
+            <Button variant="outline-dark" className="m-1" onClick={(e) => {
+                                e.stopPropagation();
+                                handelMainContent("GChat");
+                              }}>
+              GroupChat
+            </Button>
           </div>
         </Col>
 
@@ -50,7 +74,14 @@ const handelMainContent=(content) =>{
           {mainContent === "Manage" && <Manage />}
           {mainContent === "Course" && <ViewCourse />}
           {mainContent === "Users" && <ViewUsers />}
-         
+          {mainContent === "Chat" && <ChatComponent
+            isVisible={true}
+          />}
+          {mainContent === "PChat" && <PrivateChat />}
+          {mainContent === "GChat" && <GroupChat 
+          isVisible={true}
+          currentUser={userId}/>}
+
         </Col>
       </Row>
     </Container>

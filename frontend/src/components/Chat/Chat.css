@@ -1,0 +1,27 @@
+.chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    padding: 15px;
+  }
+  
+  .chat-bubble {
+    max-width: 70%;
+  }
+  
+  .settings-icon {
+    cursor: pointer;
+  }
+  
+  .chat-footer {
+    padding: 10px;
+  }
+  

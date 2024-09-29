@@ -4,6 +4,7 @@ namespace App\Http\Controllers\FileController;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Models\LabsData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -85,8 +86,40 @@ class FileController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    // public function destroy(string $filename)
+    // {
+    //     $filePath = 'public/uploads/'.$filename;
+        
+    //     if (!Storage::exists($filePath)) {
+    //         return $this->error('File not found.', 404);
+    //     }
+    
+    //     try {
+    //         Storage::delete($filePath);
+    //         return $this->ok('File deleted successfully.');
+    //     } catch (\Exception $e) {
+    //         return $this->error('File deletion failed. Please try again later.', 500);
+    //     }
+    // }
+
+
+public function destroy(string $filename)
+{
+    $filePath = 'public/uploads/' . $filename;
+    
+    if (!Storage::exists($filePath)) {
+        return $this->error('File not found.', 404);
     }
+
+    try {
+        Storage::delete($filePath);
+        
+        LabsData::where('title', $filename)->delete();
+        
+        return $this->ok('File deleted successfully.');
+    } catch (\Exception $e) {
+        return $this->error('File deletion failed. Please try again later.', 500);
+    }
+}
+
 }

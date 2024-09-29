@@ -6,6 +6,8 @@ import RightComponent from "./../rightSection/RightComponent";
 
 import { useSelector } from "react-redux";
 import SessionDetails from "./Student/SessionDetails.jsx";
+import ChatComponent from "../Chat/ChatComponent.jsx";
+import GroupChat from "../Chat/GroupChat.jsx";
 const StudentDashboard = () => {
   
   const [isLeftVisible, setIsLeftVisible] = useState(false);
@@ -68,7 +70,12 @@ const StudentDashboard = () => {
           <Offcanvas.Title>Messages</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <RightComponent />
+        {/* <ChatComponent
+            isVisible={isRightVisible}
+          /> */}
+          <GroupChat
+          isVisible={isRightVisible}
+          currentUser={userId}/>
         </Offcanvas.Body>
       </Offcanvas>
       <Offcanvas show={isLeftVisible} onHide={toggleLeftComponent} placement="start">

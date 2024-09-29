@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { toast } from 'react-toastify';
 import { Button, Modal } from 'react-bootstrap';
 import ViewFile from "./ViewFile";
+import DeleteFile from "./DeleteFile";
 
 const token = localStorage.getItem("token");
 
@@ -20,16 +21,16 @@ const StudentsLabDetails = ({ sessionId }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
 
+
+  const [change, setChange] = useState(false);
   const handleViewFileClick = (e) => {
     e.stopPropagation();
-    setModalOpen(true); // Open the modal when the button is clicked
+    setModalOpen(true); 
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false); // Close the modal
+    setModalOpen(false); 
   };
-
-
 
 
   const getCourseDetails = `http://127.0.0.1:8000/api/labsData?filter[sessionId]=${sessionId.id}`;
@@ -52,7 +53,7 @@ const StudentsLabDetails = ({ sessionId }) => {
     };
 
     fetchCourseDetails();
-  }, [sessionId]);
+  }, [sessionId , change]);
 
   const handleExpand = (sessionId, labData) => {
     setExpandedSessionId(expandedSessionId === sessionId ? null : sessionId);
@@ -221,7 +222,7 @@ const StudentsLabDetails = ({ sessionId }) => {
                         )}
                         
                           <ViewFile filename={labData.attributes.title}/>
-   
+                          <DeleteFile filename={labData.attributes.title} expandedSessionId={setExpandedSessionId} change={setChange}/>
                       </div>
                     </td>
                   </tr>
